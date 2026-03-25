@@ -88,22 +88,30 @@ document.addEventListener('DOMContentLoaded', () => {
     animovanePrvky.forEach((prvek) => revealObserver.observe(prvek));
 
     // ===============================
-    // 2.3 Slider služeb (Pouze posun)
+    // 2.3 Slidery služeb a galerie
     // ===============================
-    const slider = document.getElementById('services-slider');
-    const predchoziTlacitko = document.querySelector('.services-prev');
-    const dalsiTlacitko = document.querySelector('.services-next');
+    function inicializovatSlider({
+        selectorSlider,
+        selectorPredchozi,
+        selectorDalsi,
+        selectorPolozky,
+        vychoziPosun = 300
+    }) {
+        const slider = document.querySelector(selectorSlider);
+        const predchoziTlacitko = document.querySelector(selectorPredchozi);
+        const dalsiTlacitko = document.querySelector(selectorDalsi);
 
-    function vypocitatPosunSlideru() {
-        const karta = slider?.querySelector('.service-card');
-        if (!karta) return 300;
+        function vypocitatPosunSlideru() {
+            const karta = slider?.querySelector(selectorPolozky);
+            if (!karta || !slider) return vychoziPosun;
 
-        const vypocitanyStyl = window.getComputedStyle(slider);
-        const mezera = parseFloat(vypocitanyStyl.gap || '30') || 30;
-        return karta.offsetWidth + mezera;
-    }
+            const vypocitanyStyl = window.getComputedStyle(slider);
+            const mezera = parseFloat(vypocitanyStyl.gap || '0') || 0;
+            return karta.offsetWidth + mezera;
+        }
 
-    if (slider) {
+        if (!slider) return;
+
         if (predchoziTlacitko) {
             predchoziTlacitko.addEventListener('click', () => {
                 slider.scrollBy({
@@ -122,6 +130,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    inicializovatSlider({
+        selectorSlider: '#services-slider',
+        selectorPredchozi: '.services-prev',
+        selectorDalsi: '.services-next',
+        selectorPolozky: '.service-card',
+        vychoziPosun: 300
+    });
+
+    inicializovatSlider({
+        selectorSlider: '#gallery-slider',
+        selectorPredchozi: '.gallery-prev',
+        selectorDalsi: '.gallery-next',
+        selectorPolozky: '.gallery-item',
+        vychoziPosun: 320
+    });
 
     // ===============================
     // 2.4 Kalkulačka ceny
@@ -217,6 +241,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ===============================
+    // 2.8 Lightbox galerie
+    // ===============================
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const galleryImages = document.querySelectorAll('.gallery-item img');
+
+    function otevritLightbox(srcObrazku) {
+        if (!lightbox || !lightboxImage) return;
+        lightboxImage.src = srcObrazku;
+        lightbox.classList.add('show');
+        document.body.classList.add('lightbox-open');
+    }
+
+    function zavritLightbox() {
+        if (!lightbox || !lightboxImage) return;
+        lightbox.classList.remove('show');
+        document.body.classList.remove('lightbox-open');
+
+        setTimeout(() => {
+            lightboxImage.src = '';
+        }, 250);
+    }
+
+    galleryImages.forEach((obrazek) => {
+        obrazek.addEventListener('click', () => {
+            otevritLightbox(obrazek.src);
+        });
+    });
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', zavritLightbox);
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                zavritLightbox();
+            }
+        });
+    }
+
+    // ===============================
+    // 2.9 Klávesa Escape
+    // ===============================
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (modal && modal.classList.contains('show')) {
@@ -227,11 +297,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mobilniMenu && mobilniMenu.classList.contains('open')) {
                 zavritMenu();
             }
+
+            if (lightbox && lightbox.classList.contains('show')) {
+                zavritLightbox();
+            }
         }
     });
 });
 
-// Formspree odeslání bez reloadu stránky
+// ===============================
+// 3. Formspree odeslání bez reloadu stránky
+// ===============================
 document.addEventListener('DOMContentLoaded', () => {
     const formular = document.getElementById('contact-form');
     const stavFormulare = document.getElementById('form-status');

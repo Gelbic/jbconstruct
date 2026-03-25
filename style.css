@@ -451,6 +451,75 @@ nav.scrolled {
     transform: translateY(-2px);
 }
 
+.gallery-nav {
+    width: 54px;
+    height: 54px;
+    border: none;
+    border-radius: 50%;
+    background: var(--dark);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    flex-shrink: 0;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+.gallery-nav:hover {
+    background: var(--primary);
+    color: var(--dark);
+    transform: translateY(-2px);
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 9999;
+}
+
+.lightbox.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.lightbox-image {
+    max-width: 95vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 42px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+}
+
+body.lightbox-open {
+    overflow: hidden;
+}
 /* PROČ MY */
 .why-us-grid {
     display: grid;
@@ -538,13 +607,29 @@ nav.scrolled {
 }
 
 /* GALERIE */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.gallery-slider-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.gallery-slider {
+    display: flex;
     gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 100%;
+    padding: 10px 4px;
+}
+
+.gallery-slider::-webkit-scrollbar {
+    display: none;
 }
 
 .gallery-item {
+    flex: 0 0 calc((100% - 50px) / 3);
     position: relative;
     aspect-ratio: 2 / 3;
     overflow: hidden;
@@ -576,6 +661,7 @@ nav.scrolled {
     padding: 30px;
     opacity: 0;
     transition: 0.4s;
+    pointer-events: none;
 }
 
 .gallery-item:hover .gallery-overlay {
@@ -1264,13 +1350,29 @@ nav.scrolled {
         gap: 10px;
     }
 
+    .gallery-slider-wrap {
+        gap: 10px;
+    }
+
     .service-card {
         flex: 0 0 85%;
         min-height: auto;
         padding: 40px 24px;
     }
 
-    .services-nav {
+    .gallery-slider {
+        gap: 20px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-item {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+    }
+
+    .services-nav,
+    .gallery-nav {
         display: none;
     }
 }
@@ -1356,6 +1458,10 @@ nav.scrolled {
     }
 
     .service-card {
+        flex: 0 0 88%;
+    }
+
+    .gallery-item {
         flex: 0 0 88%;
     }
 }
@@ -1607,3 +1713,47 @@ nav.scrolled {
     transform: translateY(0);
     filter: blur(0);
 }
+
+
+
+.reviews {
+    background: #f7f7f7;
+    padding: 80px 0;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.review-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.stars {
+    color: #f5b301;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.review-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.review-author {
+    font-size: 14px;
+    color: #555;
+}
+
