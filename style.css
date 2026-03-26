@@ -2167,3 +2167,57 @@ body.lightbox-open {
     text-align: center;
     margin-top: 40px;
 }
+
+/* ===== FAKTURAČNÍ ÚDAJE VE FOOTERU ===== */
+.footer-col:nth-child(2) {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 16px;
+    padding: 24px 22px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-col:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 22px;
+    width: 48px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 999px;
+}
+
+.footer-col:nth-child(2) h4 {
+    margin-bottom: 14px;
+    color: var(--primary);
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+}
+
+.footer-col:nth-child(2) p {
+    margin: 0;
+    color: #e7e2d6;
+    line-height: 1.9;
+    font-size: 0.95rem;
+}
+
+.footer-col:nth-child(2) p br {
+    content: "";
+    display: block;
+    margin-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+    .footer-col:nth-child(2) {
+        padding: 20px 18px;
+        border-radius: 14px;
+    }
+
+    .footer-col:nth-child(2) p {
+        font-size: 0.92rem;
+        line-height: 1.8;
+    }
+}
