@@ -2161,3 +2161,9 @@ body.lightbox-open {
         line-height: 1.6;
     }
 }
+
+.subtitle-center {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+}
